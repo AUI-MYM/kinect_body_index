@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Samples.Kinect.BodyBasics
+namespace MYMGames.Hopscotch
 {
     using System;
     using System.Collections.Generic;
