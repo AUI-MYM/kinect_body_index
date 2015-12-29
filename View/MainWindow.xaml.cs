@@ -4,7 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace MYMGames.Hopscotch
+namespace MYMGames.Hopscotch.View
+
 {
     using System;
     using System.Collections.Generic;

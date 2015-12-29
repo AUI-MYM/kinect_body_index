@@ -4,14 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:k="http://schemas.microsoft.com/kinect/2014"
-        xmlns:local="clr-namespace:MYMGames.Hopscotch"
-        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="MYMGames.Hopscotch.HomeWindow"
+        xmlns:local="clr-namespace:MYMGames.Hopscotch.View"
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="MYMGames.Hopscotch.View.HomeWindow"
+        xmlns:vm="clr-namespace:MYMGames.Hopscotch.ViewModel"
         mc:Ignorable="d"
         Title="MYM Games" Width="1366" Height="768"
         WindowStyle="None" ResizeMode="NoResize"  
-        WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        DataContext="{DynamicResource ViewModelHome}">
+    <Window.Resources>
+        <vm:HomeViewModel x:Key="ViewModelHome"></vm:HomeViewModel>
+    </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="Images/background.jpg" />
+        <ImageBrush ImageSource="../Images/background.jpg" />
     </Window.Background>
     <k:KinectRegion x:Name="kinectRegion">
         <Grid>
@@ -26,7 +31,7 @@
 
             </Grid>
             <Grid Margin="0,115,0,0">
-                <ItemsControl x:Name="menuItems">
+                <ItemsControl ItemsSource="{Binding menuItems, UpdateSourceTrigger=PropertyChanged}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button x:Name="MenuButton" Command="{Binding theCommand}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
@@ -67,7 +72,18 @@
                                     </Style>
                                 </Button.Style>
                                 <Grid Margin="0,25,0,5">
-                                    <TextBlock x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}" Foreground="White"></TextBlock>
+                                    <TextBlock x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property= "Foreground" Value="White"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property ="IsMouseOver" Value="True">
+                                                        <Setter Property= "Foreground" Value="Red"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Grid>
                             </Button>
                         </DataTemplate>

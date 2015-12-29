@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Wpf.Controls;
-using MYMGames.Hopscotch.model;
+using MYMGames.Hopscotch.Model;
 
-namespace MYMGames.Hopscotch
+namespace MYMGames.Hopscotch.View
 {
     /// <summary>
     /// Interaction logic for HomeWindow.xaml
@@ -25,23 +25,12 @@ namespace MYMGames.Hopscotch
         public HomeWindow()
         {
             this.InitializeComponent();
-            List<Menu_Item> items = new List<Menu_Item>();
-            items.Add(new Menu_Item("Start Game",null));
-            items.Add(new Menu_Item("Options",null));
-            items.Add(new Menu_Item("Exit",Button_Click_Exit));
-            this.menuItems.ItemsSource = items;
-            
             KinectRegion.SetKinectRegion(this, kinectRegion);
             App app = ((App)Application.Current);
             app.KinectRegion = kinectRegion;
-
             // Use the default sensor
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
 
-            //// Add in display content
-            //var sampleDataSource = SampleDataSource.GetGroup("Group-1");
-            //this.itemsControl.ItemsSource = sampleDataSource;
-            
         }
 
         private void Button_Click_Exit()
