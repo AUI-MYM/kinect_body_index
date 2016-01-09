@@ -21,11 +21,7 @@ namespace MYMGames.Hopscotch.ViewModel
 
         private void goToMainMenu(object obj)
         {
-            HomeWindow hw = new HomeWindow();
-            hw.Show();
-            Application.Current.MainWindow.Close();
-            Application.Current.MainWindow = hw;
-            
+            WindowManager.goBack(); 
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace MYMGames.Hopscotch.Model
 {
-    class Menu_Item
+    public class Menu_Item
     {
         public string text { get; set; }
         public RelayCommand theCommand { get; set; }

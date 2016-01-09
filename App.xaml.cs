@@ -9,7 +9,6 @@ namespace MYMGames.Hopscotch
     using System;
     using System.Windows;
     using Microsoft.Kinect.Wpf.Controls;
-
     /// <summary>
     /// Interaction logic for App
     /// </summary>
@@ -18,3 +17,4 @@ namespace MYMGames.Hopscotch
         public KinectRegion KinectRegion { get; internal set; }
     }
 }
+

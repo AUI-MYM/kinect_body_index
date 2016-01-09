@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Wpf.Controls;
 using MYMGames.Hopscotch.Model;
+using MYMGames.Hopscotch.Helpers;
+using Parse;
 
 namespace MYMGames.Hopscotch.View
 {
@@ -30,13 +32,20 @@ namespace MYMGames.Hopscotch.View
             app.KinectRegion = kinectRegion;
             // Use the default sensor
             this.kinectRegion.KinectSensor = KinectSensor.GetDefault();
-
         }
+
+
+    
 
         private void Button_Click_Exit()
         {
             Application.Current.Shutdown();
 
+        }
+
+        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            SoundManager.playMenuSound();
         }
     }
 }

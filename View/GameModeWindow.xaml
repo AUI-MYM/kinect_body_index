@@ -30,8 +30,9 @@
                 <k:KinectUserViewer Grid.Column="2" Height="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="154.5,10,156.5,0" Width="Auto" />
             </Grid>
             <Grid Margin="0,115,0,0">
-
-                <TextBlock x:Name="textBlock" Text="{Binding welcomeText}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}"></TextBlock>
+                <Button Command="{Binding GoBackToMainMenu}">
+                    <TextBlock x:Name="textBlock" Text="{Binding welcomeText}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}"></TextBlock>
+                </Button>
             </Grid>
         </Grid>
     </k:KinectRegion>

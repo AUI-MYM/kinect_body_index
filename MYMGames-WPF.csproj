@@ -54,6 +54,14 @@
       <HintPath>$(KINECTSDK20_DIR)Assemblies\Microsoft.Kinect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Kinect.Wpf.Controls, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Parse, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Parse.1.6.2\lib\net45\Parse.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Parse.NetFx45, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Parse.1.6.2\lib\net45\Parse.NetFx45.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -64,20 +72,52 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\OpeningWindow.xaml.cs">
+      <DependentUpon>OpeningWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Common\StandardStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HandPointers\HandPointerStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\DesignTimeResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="View\AdvancedOptionsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DifficultyUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\GameModeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HomeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LeaderboardUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainMenuUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -89,19 +129,43 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\BindableBase.cs" />
+    <Compile Include="HandPointers\HandInScreenEngagementModel.cs" />
+    <Compile Include="HandPointers\HandOverheadEngagementModel.cs" />
+    <Compile Include="Helpers\ParseConnector.cs" />
+    <Compile Include="Helpers\SoundManager.cs" />
+    <Compile Include="Helpers\WindowManager.cs" />
+    <Compile Include="Model\GameMode.cs" />
+    <Compile Include="Model\LeaderboardModel.cs" />
     <Compile Include="ViewModel\GameModeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
+    <Compile Include="View\AdvancedOptionsUserControl.xaml.cs">
+      <DependentUpon>AdvancedOptionsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DifficultyUserControl.xaml.cs">
+      <DependentUpon>DifficultyUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\GameModeWindow.xaml.cs">
       <DependentUpon>GameModeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\LeaderboardUserControl.xaml.cs">
+      <DependentUpon>LeaderboardUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainMenuUserControl.xaml.cs">
+      <DependentUpon>MainMenuUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\OpeningWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MenuItem.cs" />
@@ -124,6 +188,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -141,7 +206,20 @@
   <ItemGroup>
     <Resource Include="Images\background.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Sounds\soundtrack.wav"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="HandPointers\HighlightRectangle.png" />
+    <Resource Include="Images\download400_400.jpg" />
+    <Resource Include="Images\download500_500.jpg" />
+    <Resource Include="Images\back-button.png" />
+    <Resource Include="Images\theLogo.png" />
+    <Resource Include="Images\theLogo1.png" />
+    <Resource Include="Images\theLogo2.png" />
+    <Content Include="Sounds\menu.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
