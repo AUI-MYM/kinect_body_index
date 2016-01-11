@@ -81,6 +81,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\MultiPlayerUserControl.xaml.cs">
+      <DependentUpon>MultiPlayerUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\OpeningWindow.xaml.cs">
       <DependentUpon>OpeningWindow.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MultiPlayerUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\OpeningWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,7 +214,8 @@
     <Resource Include="Images\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sounds\soundtrack.wav"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Sounds\soundtrack.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="HandPointers\HighlightRectangle.png" />
     <Resource Include="Images\download400_400.jpg" />

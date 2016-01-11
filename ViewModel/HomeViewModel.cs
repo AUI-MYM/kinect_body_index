@@ -54,7 +54,8 @@ namespace MYMGames.Hopscotch.ViewModel
         private async void setLeaderboardBackground()
         {
             List<LeaderboardModel> items = await ParseConnector.getLeaderboard();
-            leaderboardlist = items;
+            leaderboardlist = new List<LeaderboardModel>() { (new LeaderboardModel() { rank=1, score=1, user_name="Connecting..." }) };
+            leaderboardlist = await ParseConnector.getLeaderboard(); ;
         }
 
         private void startGame(Object obj)
@@ -157,7 +158,7 @@ namespace MYMGames.Hopscotch.ViewModel
         public List<LeaderboardModel> leaderboardlist
         {
             get { return _leaderboardList; }
-            private set { _leaderboardList = value; RaisePropertyChanged("LeaderboardModel"); }
+            private set { _leaderboardList = value; RaisePropertyChanged("leaderboardlist"); }
         }
 
         private string _ChooseDifficulty ="";

@@ -11,7 +11,8 @@
         Title="MYM Games" Width="1366" Height="768"
         WindowStyle="None" ResizeMode="NoResize"  
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
-        DataContext="{DynamicResource HomeViewModel}">
+        DataContext="{DynamicResource HomeViewModel}"
+        Closing="Window_Closing">
     <Window.Resources>
         <vm:HomeViewModel x:Key="HomeViewModel"></vm:HomeViewModel>
     </Window.Resources>

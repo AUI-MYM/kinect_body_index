@@ -47,5 +47,10 @@ namespace MYMGames.Hopscotch.View
         {
             SoundManager.playMenuSound();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ParseConnector.storeOffline();
+        }
     }
 }
