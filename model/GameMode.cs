@@ -11,11 +11,11 @@ namespace MYMGames.Hopscotch.Model
 {
     public class GameMode
     {
+        public int age_range_code { get; set; } // 0: 3-5, 1: 6-7, 2:8+
         public bool timeTrial { get; set;}
-        public int timeTrialAmount { get; set; }
         public bool popQuiz { get; set; }
         public int levelCode { get; set; } //defining the difficulty, 0:easy 1:medium 2:hard
-        public string title { get; set;}
+        public string Title { get; set;}
         private Uri imagePath;
         private ImageSource image = null;
         public ImageSource Image
@@ -36,7 +36,7 @@ namespace MYMGames.Hopscotch.Model
         public GameMode(string title, string image_path, RelayCommand command, int difficulty)
         {
             this.levelCode = difficulty;
-            this.title = title;
+            this.Title = title;
             this.imagePath = new Uri(image_path, UriKind.Relative);
             theCommand = command;
         }

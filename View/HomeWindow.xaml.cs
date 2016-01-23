@@ -43,14 +43,15 @@ namespace MYMGames.Hopscotch.View
 
         }
 
-        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
-        {
-            SoundManager.playMenuSound();
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ParseConnector.storeOffline();
+            if (this.kinectRegion.KinectSensor != null)
+            {
+                this.kinectRegion.KinectSensor.Close();
+                this.kinectRegion.KinectSensor = null;
+            }
+
         }
     }
 }

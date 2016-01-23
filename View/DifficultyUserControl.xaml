@@ -6,76 +6,16 @@
              xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
              xmlns:k="http://schemas.microsoft.com/kinect/2014"
              xmlns:local="clr-namespace:MYMGames.Hopscotch.View"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-        <Grid>
-            <ItemsControl ItemsSource="{Binding menuItems, UpdateSourceTrigger=PropertyChanged}" >
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button x:Name="MenuButton" Command="{Binding theCommand}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"
-                                    UIElement.MouseEnter="MenuButton_MouseEnter" Margin="314,0,388,0">
-                            <Button.Triggers>
-                                <EventTrigger RoutedEvent="Button.MouseEnter">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(ee:PixelateEffect.Pixelation)" Storyboard.Target="{Binding ElementName=MenuButton}">
-                                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1.25"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1.0"/>
-                                                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Button.Triggers>
-                            <Button.Effect>
-                                <ee:PixelateEffect Pixelation="0"></ee:PixelateEffect>
-                            </Button.Effect>
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Background="Transparent">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="Transparent"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <Grid Margin="0,25,0,5">
-                                <TextBlock x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property= "Foreground" Value="White"/>
-                                            <Style.Triggers>
-                                                <Trigger Property ="IsMouseOver" Value="True">
-                                                    <Setter Property= "Foreground" Value="Red"/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </Grid>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-
-            </ItemsControl>
-        </Grid>
-        <Grid Height="125" VerticalAlignment="Top">
-            <TextBlock x:Name="textBlock" TextWrapping="Wrap" FontWeight="Bold" Text="{Binding ChooseDifficulty}" HorizontalAlignment="Center" FontSize="52" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
-            </TextBlock>
-        </Grid>
-        <Grid Margin="10,130,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        
+        <Grid Grid.Row="1">
             <ScrollViewer Margin="0,0,0,10" VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               Name="scrollViewer" 
@@ -91,13 +31,12 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Margin="3" Style="{StaticResource KinectTileButton}" Command="{Binding theCommand}" CommandParameter="{Binding levelCode}">
-                                <Grid HorizontalAlignment="Left" Width="400" Height="400" Margin="50,50,50,50"
-                                          UIElement.MouseEnter="MenuButton_MouseEnter">
+                                <Grid HorizontalAlignment="Left" Width="400" Height="400" Margin="50,50,50,50">
                                     <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                                         <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                                     </Border>
-                                    <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
-                                        <TextBlock Text="{Binding title}"  HorizontalAlignment="Center" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}" Height="60" Margin="15,0,15,0"/>
+                                    <StackPanel VerticalAlignment="Bottom" Background="{x:Null}">
+                                        <TextBlock Text="{Binding Title}" Foreground="Orange" HorizontalAlignment="Center" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}" Height="60" Margin="15,0,15,0"/>
                                     </StackPanel>
                                 </Grid>
                             </Button>
@@ -108,20 +47,30 @@
             </ScrollViewer>
 
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="85" Margin="120,0,0,0">
-            <Grid.Style>
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding backButtonVisibility}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <Button Style="{StaticResource KinectTileButton}" Command="{Binding backButtonCommand}">
-                <Image x:Name="image" Source="../Images/back-button.png" />
-            </Button>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding backButtonVisibility}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Button Margin="20 0 0 0" Style="{StaticResource KinectTileButton}" Command="{Binding backButtonCommand}">
+                    <Image HorizontalAlignment="Center" Margin="10 10 10 10"  x:Name="image" Source="../Images/back-button.png" />
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="textBlock" TextWrapping="Wrap" Foreground="Orange" FontWeight="Bold" Text="{Binding ChooseDifficulty}" HorizontalAlignment="Center" FontSize="52" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
+                </TextBlock>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

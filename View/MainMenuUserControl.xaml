@@ -7,51 +7,20 @@
              xmlns:local="clr-namespace:MYMGames.Hopscotch.View"
              xmlns:k="http://schemas.microsoft.com/kinect/2014"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600">
+             d:DesignHeight="768" d:DesignWidth="1024">
     <Grid>
-        <ItemsControl ItemsSource="{Binding menuItems, UpdateSourceTrigger=PropertyChanged}" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ItemsControl Grid.Column="0" ItemsSource="{Binding menuItems, UpdateSourceTrigger=PropertyChanged}" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button x:Name="MenuButton" Command="{Binding theCommand}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"
-                                    UIElement.MouseEnter="MenuButton_MouseEnter" Margin="300,0,300,0">
-                        <Button.Triggers>
-                            <EventTrigger RoutedEvent="Button.MouseEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(ee:PixelateEffect.Pixelation)" Storyboard.Target="{Binding ElementName=MenuButton}">
-                                            <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1.25"/>
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1.0"/>
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
-                                        </DoubleAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Button.Triggers>
-                        <Button.Effect>
-                            <ee:PixelateEffect Pixelation="0"></ee:PixelateEffect>
-                        </Button.Effect>
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type Button}">
-                                            <Border Background="Transparent">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <Grid Margin="0,25,0,5">
-                            <TextBlock x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
+                    <Grid HorizontalAlignment="Center" Margin="20 20 20 20">
+                        <Button MinWidth="500" HorizontalAlignment="Left" Style="{StaticResource KinectTileButton}" x:Name="MenuButton" Command="{Binding theCommand}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"
+                                    Width="Auto">
+                        <Grid>
+                            <TextBlock TextWrapping="Wrap" x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" 
+                                       FontSize="64" FontWeight="Bold" FontFamily="Ravie" Background="{x:Null}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property= "Foreground" Value="White"/>
@@ -65,6 +34,7 @@
                             </TextBlock>
                         </Grid>
                     </Button>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

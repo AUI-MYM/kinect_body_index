@@ -24,7 +24,7 @@ namespace MYMGames.Hopscotch.View
         public OpeningWindow()
         {
             InitializeComponent();
-            SoundManager.playBackgroundMusic();
+            SoundManager.Instance.playBackgroundMusic();
             ParseClient.Initialize("DSawAatii6x568hptZIEBTFmaslmTuxNdSNAUNTR", "R2Le76ZyMNZRE63TKfkJ7eebJkdrWT1EHoeDlOzH");
         }
 

@@ -376,7 +376,8 @@ namespace MYMGames.Hopscotch.View
                                 {
                                     position.Z = InferredZPositionClamp;
                                 }
-                                DistanceText = position.X+ " " +position.Y+ " " +position.Z;
+                                if (jointType == JointType.FootLeft)
+                                    DistanceText = position.X+ " " +position.Y+ " " +position.Z;
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }

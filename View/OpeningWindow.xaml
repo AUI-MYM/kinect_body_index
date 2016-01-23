@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MYMGames.Hopscotch.View"
         xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="MYMGames.Hopscotch.View.OpeningWindow"
         mc:Ignorable="d"
-        Title="MYM Games" Width="1366" Height="768"
+        Title="MYM Games" Width="1024" Height="768"
         WindowStyle="None" ResizeMode="NoResize"  
         WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.Resources>
@@ -36,7 +36,17 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid>
-        <Image x:Name="image" Source="../Images/theLogo1.png" Margin="0" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Grid.Column="1" Grid.Row="1" x:Name="image" Source="../Images/theLogo1.png" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -46,6 +56,6 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <Image x:Name="image1" Source="../Images/theLogo2.png" HorizontalAlignment="Center" Height="126.171" Margin="238.629,0,238.628,57.829" VerticalAlignment="Bottom" Width="888.743"></Image>
+        <Image Grid.Column="1" Grid.Row="2" x:Name="image1" Source="../Images/theLogo2.png" HorizontalAlignment="Center"  VerticalAlignment="Center"></Image>
     </Grid>
 </Window>

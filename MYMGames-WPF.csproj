@@ -81,6 +81,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BoxFactory.cs" />
+    <Compile Include="Helpers\CarpetConnector.cs" />
+    <Compile Include="Helpers\ChapterFactory.cs" />
+    <Compile Include="Helpers\GameLogic.cs" />
+    <Compile Include="Helpers\KinectHelper.cs" />
+    <Compile Include="Model\BoxModel.cs" />
+    <Compile Include="Model\Chapter.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\QuestionModel.cs" />
+    <Compile Include="Model\Step.cs" />
     <Compile Include="View\MultiPlayerUserControl.xaml.cs">
       <DependentUpon>MultiPlayerUserControl.xaml</DependentUpon>
     </Compile>
@@ -175,7 +186,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\MenuItem.cs" />
+    <Compile Include="Model\Menu_Item.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -214,12 +225,43 @@
     <Resource Include="Images\background.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Sounds\yay_z.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\brochure_Back.jpg" />
+    <Resource Include="Images\level1.png" />
+    <Resource Include="Images\level2.png" />
+    <Resource Include="Images\level3.png" />
+    <Resource Include="Images\avatar.png" />
+    <Resource Include="Images\footsteps.png" />
+    <Resource Include="Images\sample_question.jpg" />
+    <Resource Include="Images\l11.png" />
+    <Resource Include="Images\l12.jpg" />
+    <Resource Include="Images\l13.jpg" />
+    <Resource Include="Images\l14.jpg" />
+    <Resource Include="Images\l15.png" />
+    <Resource Include="Images\l21.png" />
+    <Resource Include="Images\l22.jpg" />
+    <Resource Include="Images\l23.jpg" />
+    <Resource Include="Images\l24.jpg" />
+    <Resource Include="Images\l25.png" />
+    <Resource Include="Images\l31.jpg" />
+    <Resource Include="Images\l32.png" />
+    <Resource Include="Images\l33.png" />
+    <Resource Include="Images\l34.jpg" />
+    <Resource Include="Images\l35.jpg" />
+    <Resource Include="Images\left_foot.png" />
+    <Resource Include="Images\right_foot.png" />
+    <Content Include="Sounds\applause_y.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\cheering.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sounds\soundtrack.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="HandPointers\HighlightRectangle.png" />
-    <Resource Include="Images\download400_400.jpg" />
-    <Resource Include="Images\download500_500.jpg" />
     <Resource Include="Images\back-button.png" />
     <Resource Include="Images\theLogo.png" />
     <Resource Include="Images\theLogo1.png" />

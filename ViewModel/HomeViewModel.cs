@@ -17,8 +17,8 @@ namespace MYMGames.Hopscotch.ViewModel
         public HomeViewModel()
         {
             initMainMenu(null);
-            //startGame(null);
         }
+        #region ui set methods
         private void clearfields()
         {
             ChooseDifficulty = "";
@@ -28,6 +28,7 @@ namespace MYMGames.Hopscotch.ViewModel
             popQuizListAgeList = new List<StringBoolDuo>();
             timeTrialList = new List<StringBoolDuo>();
             readyList = new List<Menu_Item>();
+            multiPlayers = new List<Menu_Item>();
         }
 
         public void initMainMenu(Object obj)
@@ -35,7 +36,7 @@ namespace MYMGames.Hopscotch.ViewModel
             clearfields();
             screenStep = 0;
             List<Menu_Item> items = new List<Menu_Item>();
-            items.Add(new Menu_Item("START GAME", new RelayCommand(startGame)));
+            items.Add(new Menu_Item("START GAME", new RelayCommand(selectNumberOfPlayers)));
             items.Add(new Menu_Item("LEADERBOARD", new RelayCommand(showLeaderboard)));
             items.Add(new Menu_Item("EXIT", new RelayCommand(exit)));
             menuItems = items;
@@ -47,15 +48,15 @@ namespace MYMGames.Hopscotch.ViewModel
         {
             clearfields();
             screenStep = 5;
+            ChooseDifficulty = "Leaderboard";
+            leaderboardlist = new List<LeaderboardModel>() { (new LeaderboardModel() { rank = 1, score = 1, user_name = "Connecting..." }) };
             setLeaderboardBackground();
             CurrentPage = new LeaderboardUserControl();
         }
 
         private async void setLeaderboardBackground()
         {
-            List<LeaderboardModel> items = await ParseConnector.getLeaderboard();
-            leaderboardlist = new List<LeaderboardModel>() { (new LeaderboardModel() { rank=1, score=1, user_name="Connecting..." }) };
-            leaderboardlist = await ParseConnector.getLeaderboard(); ;
+            leaderboardlist = await ParseConnector.getLeaderboard();
         }
 
         private void startGame(Object obj)
@@ -64,9 +65,9 @@ namespace MYMGames.Hopscotch.ViewModel
             ChooseDifficulty = "Choose Difficulty";
             screenStep = 1;
             List<GameMode> items = new List<GameMode>();
-            items.Add(new GameMode("Easy", "../Images/download400_400.jpg", new RelayCommand(setDifficulty),0));
-            items.Add(new GameMode("Medium", "../Images/download400_400.jpg", new RelayCommand(setDifficulty),1));
-            items.Add(new GameMode("Hard", "../Images/download400_400.jpg", new RelayCommand(setDifficulty),2));
+            items.Add(new GameMode("Easy", "../Images/level1.png", new RelayCommand(setDifficulty),0));
+            items.Add(new GameMode("Medium", "../Images/level2.png", new RelayCommand(setDifficulty),1));
+            items.Add(new GameMode("Hard", "../Images/level3.png", new RelayCommand(setDifficulty),2));
             GameModes = items;
             DifficultyUserControl duc = new DifficultyUserControl();
             CurrentPage = duc;
@@ -94,22 +95,77 @@ namespace MYMGames.Hopscotch.ViewModel
             popQuizList = time_list;
             time_list = new List<StringBoolDuo>()
             {
-                new StringBoolDuo() { text = "3-5 years old", value = false },
-                new StringBoolDuo() { text = "6-7 years old", value = false },
-                new StringBoolDuo() { text = "8+ years old", value = false }
+                new StringBoolDuo() { text = "5-7 years old", value = false },
+                new StringBoolDuo() { text = "8-10 years old", value = false },
+                new StringBoolDuo() { text = "11+ years old", value = false }
             };
             popQuizListAgeList = time_list;
             CurrentPage = new AdvancedOptionsUserControl();
         }
 
+        private void selectNumberOfPlayers(object obj)
+        {
+            clearfields();
+            screenStep = 6;
+            ChooseDifficulty = "Select Number of Players";
+            multiPlayers = new List<Menu_Item>()
+            {
+                new Menu_Item("1 Player", new RelayCommand(setPlayerNames)),
+                new Menu_Item("2 Players", new RelayCommand(setPlayerNames)),
+                new Menu_Item("3 Players", new RelayCommand(setPlayerNames)),
+                new Menu_Item("4 Players", new RelayCommand(setPlayerNames))
+            };
+            CurrentPage = new MultiPlayerUserControl();
+        }
+
+        private void setPlayerNames(object obj)
+        {
+            int numberOfPlayers = int.Parse(((string)obj).Split(' ')[0]);
+            List<Player> items = new List<Player>();
+            for (int i=0; i<numberOfPlayers; i++)
+            {
+                items.Add(new Player("../Images/avatar.png"));
+            }
+            players = items;
+            visibilityNextButton = true;
+        }
+
         private void openGameModeWindow(object obj)
         {
             //TODO fetch what has been choosen and validate
+            GameLogic.players = this.players;
+            selectedGameMode.popQuiz = popQuizList.First().value;
+            selectedGameMode.timeTrial = timeTrialList.First().value;
+            selectedGameMode.age_range_code = 0;
+            for (int i=0; i< popQuizListAgeList.Count; i++)
+            {
+                if (popQuizListAgeList.ElementAt(i).value)
+                    selectedGameMode.age_range_code += i;
+            }
+            GameLogic.game_mode = selectedGameMode;
+            switch(selectedGameMode.levelCode)
+            {
+                case 0:
+                    GameLogic.chapters = ChapterFactory.getEasyChapters();
+                    break;
+                case 1:
+                    GameLogic.chapters = ChapterFactory.getMediumChapters();
+                    break;
+                case 2:
+                    GameLogic.chapters = ChapterFactory.getHardChapters();
+                    break;
+            }
+
+            GameLogic.boxes = BoxFactory.create_white_boxes();
+            GameLogic.configureBoxes(0,0,0);
+            GameLogic.getCurrentPlayer().current_user = true;
             GameModeWindow newWindow = new GameModeWindow();
             WindowManager.goToWindow(newWindow);
             
         }
+        #endregion
 
+        #region ui object lists
         private List<Menu_Item> _menuItems;
         public List<Menu_Item> menuItems
         {
@@ -161,6 +217,20 @@ namespace MYMGames.Hopscotch.ViewModel
             private set { _leaderboardList = value; RaisePropertyChanged("leaderboardlist"); }
         }
 
+        private List<Menu_Item> _multiPlayers;
+        public List<Menu_Item> multiPlayers
+        {
+            get { return _multiPlayers; }
+            private set { _multiPlayers = value; RaisePropertyChanged("multiPlayers"); }
+        }
+
+        private List<Player> _players;
+        public List<Player> players
+        {
+            get { return _players; }
+            private set { _players = value; RaisePropertyChanged("players"); }
+        }
+
         private string _ChooseDifficulty ="";
         public string ChooseDifficulty
         {
@@ -179,6 +249,17 @@ namespace MYMGames.Hopscotch.ViewModel
             }
         }
 
+        private RelayCommand _nextToDifficultySelectionCommand;
+        public RelayCommand nextToDifficultySelectionCommand
+        {
+            get
+            {
+                if (_nextToDifficultySelectionCommand == null)
+                    _nextToDifficultySelectionCommand = new RelayCommand(startGame);
+                return _nextToDifficultySelectionCommand;
+            }
+        }
+
         private GameMode _selectedGameMode;
         public GameMode selectedGameMode
         {
@@ -192,29 +273,11 @@ namespace MYMGames.Hopscotch.ViewModel
                 RaisePropertyChanged("selectedGameMode");
             }
         }
-        /**
-         screen step indicates in which step the start game process in
-            0 -> main menu
-            1 -> start game menu
-            2 -> start easy
-            3 -> start medium
-            4 -> start hard
-            5 -> game window*/
-        private int _screenStep = 0;
-        public int screenStep
+        private UserControl _CurrentPage;
+        public UserControl CurrentPage
         {
-            get
-            {
-                return _screenStep;
-            }
-            set
-            {
-                if (_screenStep != value)
-                {
-                    backButtonVisibility = value > 0;
-                    _screenStep = value;
-                }
-            }
+            get { return _CurrentPage; }
+            set { _CurrentPage = value; RaisePropertyChanged("CurrentPage"); }
         }
 
         private bool _backButtonVisibility;
@@ -234,11 +297,49 @@ namespace MYMGames.Hopscotch.ViewModel
             }
         }
 
-        private UserControl _CurrentPage;
-        public UserControl CurrentPage
+        private bool _visibilityNextButton;
+        public bool visibilityNextButton
         {
-            get { return _CurrentPage; }
-            set { _CurrentPage = value;  RaisePropertyChanged("CurrentPage"); }
+            get
+            {
+                return _visibilityNextButton;
+            }
+
+            set
+            {
+                _visibilityNextButton = value;
+                RaisePropertyChanged("visibilityNextButton");
+            }
+        }
+
+        #endregion
+
+        #region navigation methods
+
+        /**
+         screen step indicates in which step the start game process in
+            0 -> main menu
+            1 -> start game menu
+            2 -> start easy
+            3 -> start medium
+            4 -> start hard
+            5 -> leaderboard
+            6 -> select number of players*/
+        private int _screenStep = 0;
+        public int screenStep
+        {
+            get
+            {
+                return _screenStep;
+            }
+            set
+            {
+                if (_screenStep != value)
+                {
+                    backButtonVisibility = value > 0;
+                    _screenStep = value;
+                }
+            }
         }
 
         private void goBackButton(object obj)
@@ -249,7 +350,7 @@ namespace MYMGames.Hopscotch.ViewModel
                     //do nothing
                     break;
                 case 1:
-                    initMainMenu(null);
+                    selectNumberOfPlayers(null);
                     break;
                 case 2:
                 case 3:
@@ -259,12 +360,17 @@ namespace MYMGames.Hopscotch.ViewModel
                 case 5:
                     initMainMenu(null);
                     break;
+                case 6:
+                    initMainMenu(null);
+                    break;
             }
         }
         public void exit(object obj)
         {
             Application.Current.Shutdown();
         }
+
+        #endregion
 
         internal class StringBoolDuo
         {

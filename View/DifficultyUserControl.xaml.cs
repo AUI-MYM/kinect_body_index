@@ -31,9 +31,5 @@ namespace MYMGames.Hopscotch.View
 
         }
 
-        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
-        {
-            SoundManager.playMenuSound();
-        }
     }
 }

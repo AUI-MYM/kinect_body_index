@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MYMGames.Hopscotch.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,7 @@ namespace MYMGames.Hopscotch.Helpers
             Window theWindow = Instance.pageStack.Pop();
             if (theWindow == null)
                 return false;
+            theWindow = new HomeWindow();
             Window oldWindow = Application.Current.MainWindow;
             Application.Current.MainWindow = theWindow;
             theWindow.Show();
@@ -47,7 +49,7 @@ namespace MYMGames.Hopscotch.Helpers
             Application.Current.MainWindow = nextWindow;
             nextWindow.Show();
             //System.Threading.Thread.Sleep(200); //200 ms sleep
-            //oldWindow.Hide();
+            oldWindow.Hide();
             return true;
         }
     }

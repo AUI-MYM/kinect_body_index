@@ -11,16 +11,31 @@
         Title="MYM Games" Width="1366" Height="768"
         WindowStyle="None" ResizeMode="NoResize"  
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
-        DataContext="{DynamicResource GameModeViewModel}">
+        DataContext="{DynamicResource GameModeViewModel}"
+        Loaded="GameModeWindow_Loaded"
+        Closed="Window_Closed">
     <Window.Resources>
         <vm:GameModeViewModel x:Key="GameModeViewModel"></vm:GameModeViewModel>
+        <Storyboard x:Key="TestStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" 
+                         To="0"/>
+
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                         From="0"
+                         To="1" />
+        </Storyboard>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="../Images/background.jpg" />
+        <ImageBrush ImageSource="../Images/brochure_Back.jpg" />
     </Window.Background>
     <k:KinectRegion x:Name="kinectRegion">
         <Grid>
-            <Grid Grid.Row="0" Margin="0,10,20,0" Height="100" VerticalAlignment="Top" d:LayoutOverrides="Height">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="253*" />
@@ -28,12 +43,216 @@
                     <ColumnDefinition Width="204*"/>
                 </Grid.ColumnDefinitions>
                 <k:KinectUserViewer Grid.Column="2" Height="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="154.5,10,156.5,0" Width="Auto" />
+                <Grid Grid.Column="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="time_text"></TextBlock>
+                    <TextBlock x:Name="score_text" Grid.Row="1"></TextBlock>                    
+                </Grid>
             </Grid>
-            <Grid Margin="0,115,0,0">
-                <Button Command="{Binding GoBackToMainMenu}">
-                    <TextBlock x:Name="textBlock" Text="{Binding welcomeText}" HorizontalAlignment="Center" FontSize="64" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}"></TextBlock>
-                </Button>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="10*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1" x:Name="referenceGrid" Visibility="Visible">
+                    <Border BorderThickness="10" BorderBrush="Orange" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid>
+                            <ItemsControl Grid.IsSharedSizeScope="True" x:Name="box_items">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                                                <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                                                <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                                                <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                                                <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="A" />
+                                                <ColumnDefinition SharedSizeGroup="A" />
+                                                <ColumnDefinition SharedSizeGroup="A" />
+                                                <ColumnDefinition SharedSizeGroup="A" />
+                                                <ColumnDefinition SharedSizeGroup="A" />
+                                            </Grid.ColumnDefinitions>
+                                        </Grid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Visibility="{Binding visibility}" BorderBrush="{Binding color}"
+                                            BorderThickness="10"  Width="100" Height="100" >
+                                            <TextBlock FontSize="40" FontWeight="DemiBold" Text="{Binding text}"
+                                                       HorizontalAlignment="Center" Foreground="{Binding color}" ></TextBlock>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style>
+                                        <Style.Setters>
+                                            <Setter Property="Grid.Row" Value="{Binding row}" />
+                                            <Setter Property="Grid.Column" Value="{Binding column}" />
+                                        </Style.Setters>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+                    <Canvas x:Name="canvas">
+                        <Grid Width="25" Height="50" x:Name="grid_left">
+                            <Image Source="../Images/left_foot.png"></Image>
+                        </Grid>
+                        <Grid Width="25" Height="50" x:Name="grid_right">
+                            <Image Source="../Images/right_foot.png"></Image>
+                        </Grid>
+                    </Canvas>
+                </Grid>
+                <Grid  Grid.Column="1" VerticalAlignment="Center"  HorizontalAlignment="Center" x:Name="Message_Grid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Viewbox Stretch="Uniform" Margin="15 0 15 0">
+                        <TextBlock x:Name="Message_Text" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange" TextWrapping="Wrap" HorizontalAlignment="Center" />
+                    </Viewbox>
+                    <Button Grid.Row="1" Height="100" Margin="0 0 30 0" Style="{StaticResource KinectTileButton}" Click="Button_Click_Ready" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                        <Viewbox Height="100" Stretch="Uniform">
+                            <TextBlock x:Name="textBlock" Text="Ready!" HorizontalAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property= "Foreground" Value="White"/>
+                                        <Style.Triggers>
+                                            <Trigger Property ="IsMouseOver" Value="True">
+                                                <Setter Property= "Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Viewbox>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="question_grid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Viewbox>
+                        <TextBlock Text="Hold Still..." TextWrapping="Wrap" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange" />
+                    </Viewbox>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid x:Name="question_panel" Grid.Column="1" DataContext="{Binding currentQuestion}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"></RowDefinition>
+                                <RowDefinition Height="1*"></RowDefinition>
+                                <RowDefinition Height="2*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Image}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20 20 20 20"/>
+                            <Viewbox Grid.Row="1">
+                                <TextBlock Text="{Binding text}" TextWrapping="Wrap" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange" />
+                            </Viewbox>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Button Margin="40 30 20 30" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource KinectTileButton}" Click="Button_Click_No">
+                                    <Viewbox  Margin="40 2 40 2">
+                                        <TextBlock Text="No" TextWrapping="Wrap" FontWeight="Bold" FontFamily="Ravie" FontSize="35">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property= "Foreground" Value="White"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property ="IsMouseOver" Value="True">
+                                                            <Setter Property= "Foreground" Value="Red"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Viewbox>
+                                </Button>
+                                <Button Margin="40 30 20 30" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource KinectTileButton}" Click="Button_Click_Yes">
+                                    <Viewbox Margin="40 2 40 2">
+                                        <TextBlock Text="Yes" TextWrapping="Wrap" FontWeight="Bold" FontFamily="Ravie">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property= "Foreground" Value="White"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property ="IsMouseOver" Value="True">
+                                                            <Setter Property= "Foreground" Value="Red"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Margin="20 0 0 0" Style="{StaticResource KinectTileButton}" Command="{Binding GoBackToMainMenu}">
+                            <Image HorizontalAlignment="Center" Margin="10 10 10 10"  x:Name="image" Source="../Images/back-button.png" />
+                        </Button>
+                        <Grid Grid.Column="1">
+                            <TextBlock x:Name="DistanceText"></TextBlock>
+                        </Grid>
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding players}" Grid.Row="1" x:Name="players_icontrol">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{Binding border_color}" BorderThickness="4">
+                                    <Grid Margin="0 2 0 3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Margin="5 0 5 5" Source="{Binding Avatar}" Grid.Column="0"></Image>
+                                        <TextBlock Margin="5 0 5 5" Text="{Binding name}" Grid.Column="1" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange"></TextBlock>
+                                        <TextBlock Margin="0 0 5 5" Text="{Binding score}" Grid.Column="2" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange"></TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Stretch="Uniform" Margin="5 0 0 0">
+                            <TextBlock Text="{Binding pop_quiz_text}" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange" ></TextBlock>
+                        </Viewbox>
+                        <Viewbox Grid.Column="1" Stretch="Uniform" Margin=" 5 0 5 0">
+                            <TextBlock Text="{Binding time_limit_text}" FontWeight="Bold" FontFamily="Papyrus" Foreground="Orange"></TextBlock>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
             </Grid>
+
         </Grid>
     </k:KinectRegion>
 </Window>

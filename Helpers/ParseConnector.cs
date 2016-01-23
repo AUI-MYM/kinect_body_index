@@ -51,7 +51,10 @@ namespace MYMGames.Hopscotch.Helpers
 
         public static void addScore(string user_name, int score)
         {
-            throw new NotImplementedException();
+            ParseObject po = new ParseObject("Leaderboard");
+            po["user_name"] = user_name;
+            po["score"] = score;
+            po.SaveAsync();
         }
 
         public static void resetLeaderboard()
@@ -61,6 +64,7 @@ namespace MYMGames.Hopscotch.Helpers
 
         public static void storeOffline()
         {
+            if (sycned_items == null || sycned_items.Count == 0) return;
             using (FileStream outFile = File.Create(file_name))
             {
                 XmlSerializer formatter = new XmlSerializer(typeof(List<LeaderboardModel>));

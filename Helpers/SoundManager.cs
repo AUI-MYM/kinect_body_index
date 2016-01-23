@@ -12,6 +12,7 @@ namespace MYMGames.Hopscotch.Helpers
     {
         static string menuUri = "Sounds/menu.wav";
         static string soundtrackUri = "Sounds/soundtrack.wav";
+        SoundPlayer player;
         private SoundManager()
         {
 
@@ -30,9 +31,9 @@ namespace MYMGames.Hopscotch.Helpers
             }
         }
 
-        public static void playMenuSound()
+        public void playMenuSound()
         {
-            SoundPlayer player = new SoundPlayer(menuUri);
+            player = new SoundPlayer(menuUri);
             player.Load();
 
             bool soundFinished = true;
@@ -44,20 +45,41 @@ namespace MYMGames.Hopscotch.Helpers
             }
         }
 
-        public static void playBackgroundMusic()
+        public void playBackgroundMusic()
         {
+            player = new SoundPlayer(soundtrackUri);
+            player.Load();
+            player.PlayLooping();
+        }
+        //0: applause
+        //1: bravo
+        //2: game finished
+        public void playSound(int mode)
+        {
+            player.Stop();
+            string[] sounds = new string[] { "applause_y.wav", "cheering.wav", "yay_z.wav" };
+            string sound_path = "Sounds/" + sounds[mode];
+            var t = Task.Factory.StartNew(() => { _playSound(sound_path, SoundPlayed); });
             
+            
+        }
 
-            bool soundFinished = true;
-
-            if (soundFinished)
+        private void _playSound(string sound_uri, EventHandler doneCallback = null)
+        {
+            using (var player = new SoundPlayer(sound_uri))
             {
-                soundFinished = false;
-                Task.Factory.StartNew(() => {
-                    SoundPlayer player = new SoundPlayer(soundtrackUri);
-                    player.Load();
-                    player.PlaySync(); soundFinished = true; });
+                player.PlaySync();
             }
+            if (doneCallback != null)
+            {
+                // the callback is executed on the thread.
+                doneCallback(this, new EventArgs());
+            }
+        }
+
+        void SoundPlayed(object sender, EventArgs e)
+        {
+            playBackgroundMusic();
         }
     }
 }

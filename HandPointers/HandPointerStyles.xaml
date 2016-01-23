@@ -50,11 +50,11 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <SolidColorBrush x:Key="ListViewItemPlaceholderBackgroundThemeBrush" Color="Black"/>
+    <SolidColorBrush x:Key="ListViewItemPlaceholderBackgroundThemeBrush" Color="Transparent"/>
     <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="DarkGray" />
     <SolidColorBrush x:Key="ListViewItemOverlayForegroundThemeBrush" Color="Yellow" />
     <SolidColorBrush x:Key="ListViewItemOverlaySecondaryForegroundThemeBrush" Color="Aqua"/>
-    
+
     <Style x:Key="KinectTileButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -69,12 +69,12 @@
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Duration="0" Storyboard.TargetName="focusRectBrush" Storyboard.TargetProperty="Color" To="Gray"/>
+                                        <ColorAnimation Duration="0" Storyboard.TargetName="focusRectBrush" Storyboard.TargetProperty="Color" To="Orange"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Duration="0" Storyboard.TargetName="focusRectBrush" Storyboard.TargetProperty="Color" To="Gray"/>
+                                        <ColorAnimation Duration="0" Storyboard.TargetName="focusRectBrush" Storyboard.TargetProperty="Color" To="Orange"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -83,6 +83,8 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Background" Value="Transparent"/>
+       
     </Style>
 
     <DataTemplate x:Key="Kinect250x250ItemTemplate">

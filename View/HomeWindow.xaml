@@ -12,12 +12,13 @@
         WindowStyle="None" ResizeMode="NoResize"  
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
         DataContext="{DynamicResource HomeViewModel}"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+     AllowsTransparency="True">
     <Window.Resources>
         <vm:HomeViewModel x:Key="HomeViewModel"></vm:HomeViewModel>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="../Images/background.jpg" />
+        <ImageBrush ImageSource="../Images/brochure_Back.jpg" />
     </Window.Background>
     <k:KinectRegion x:Name="kinectRegion">
         <Grid>

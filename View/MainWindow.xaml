@@ -28,6 +28,6 @@
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="116,14,0,0" TextWrapping="Wrap" Text="{Binding DistanceText}" VerticalAlignment="Top" Height="31" Width="153"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="116,14,0,0" TextWrapping="Wrap" Text="{Binding DistanceText}" VerticalAlignment="Top" Height="31" Width="153" FontSize="15"/>
     </Grid>
 </Window>
