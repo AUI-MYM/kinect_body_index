@@ -51,6 +51,7 @@ namespace MYMGames.Hopscotch.View
                 this.kinectRegion.KinectSensor.Close();
                 this.kinectRegion.KinectSensor = null;
             }
+            Application.Current.Shutdown();
 
         }
     }

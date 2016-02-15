@@ -8,6 +8,7 @@ using System.Windows;
 
 namespace MYMGames.Hopscotch.Helpers
 {
+    //responsible from maintaining the state a navigation through multiple windows
     public class WindowManager
     {
         private static WindowManager instance;
@@ -33,12 +34,18 @@ namespace MYMGames.Hopscotch.Helpers
             Window theWindow = Instance.pageStack.Pop();
             if (theWindow == null)
                 return false;
-            theWindow = new HomeWindow();
+            if (theWindow is HomeWindow)
+            {
+                theWindow.Hide();
+                theWindow = new HomeWindow();
+            }
             Window oldWindow = Application.Current.MainWindow;
             Application.Current.MainWindow = theWindow;
             theWindow.Show();
+           
             //System.Threading.Thread.Sleep(200); //200 ms sleep
-            oldWindow.Close();
+            if (!(oldWindow is HomeWindow))
+                oldWindow.Close();
             return true;
         }
 

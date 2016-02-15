@@ -11,6 +11,8 @@ using System.Xml.Serialization;
 
 namespace MYMGames.Hopscotch.Helpers
 {
+    //this class includes all the game variables statically with the public accsess to all the other
+    //classes
     public class GameLogic
     {
         static Random random = new Random(DateTime.Now.Second);
@@ -39,7 +41,7 @@ namespace MYMGames.Hopscotch.Helpers
         public static int nextStep()
         {
             //check user position here if it is true, advance to next step if not, switch player
-
+            //if the time trial is enabled, check if the player makes the move withing the time limit
             if (game_mode.timeTrial)
             {
                 if (stopwatch.IsRunning)
@@ -60,7 +62,7 @@ namespace MYMGames.Hopscotch.Helpers
                     }
                 }
             }
-
+            //If the error is detected 2 consequtive times, change turns
             if (error_happened == 2)
             {
                 players.ElementAt(current_player).last_chapter_trial_amount++;
@@ -75,6 +77,7 @@ namespace MYMGames.Hopscotch.Helpers
                 SoundManager.Instance.playSound(0);
                 return 1;
             }
+            /* allowing only one foot is disabled, no chance to fix bugs
             if (getCurrentStep().current_2 == 0 && KinectHelper.foot_flag == 2)
             {
                 //you need to stay on one foot dude!
@@ -92,7 +95,7 @@ namespace MYMGames.Hopscotch.Helpers
                     SoundManager.Instance.playSound(0);
                     return 8;
                 }
-            }
+            }*/
             bool flag = KinectHelper.testBox(getCurrentStep().current_1, getCurrentStep().current_2);
             //not first not last still on the box
             if (current_step != chapters.ElementAt(current_chapter).steps.Count - 1 && current_step != 0 && flag)
@@ -198,12 +201,15 @@ namespace MYMGames.Hopscotch.Helpers
         {
             return chapters.ElementAt(current_chapter).steps.ElementAt(current_step);
         }
-
+        //reflects the steps changes on the carpet and on the screen
         public static void loadChanges()
         {
             if (error_happened == 2)
             {
                 Step theStep = chapters.ElementAt(current_chapter).steps.ElementAt(current_step);
+                Step firstStep = chapters.ElementAt(current_chapter).steps.ElementAt(0);
+                CarpetConnector.sendData(firstStep.trigger_no);
+                CarpetConnector.sendData(theStep.error_trigger_no);
                 setAllBoxesToWhite();
                 if (theStep.start > 0) boxes.ElementAt(theStep.start - 1).color = new SolidColorBrush(Colors.Purple);
                 if (theStep.finish > 0) boxes.ElementAt(theStep.finish - 1).color = new SolidColorBrush(Colors.Orange);
@@ -213,6 +219,7 @@ namespace MYMGames.Hopscotch.Helpers
             else
             {
                 Step theStep = chapters.ElementAt(current_chapter).steps.ElementAt(current_step);
+                CarpetConnector.sendData(theStep.trigger_no);
                 setAllBoxesToWhite();
                 if (theStep.next_1 > 0) boxes.ElementAt(theStep.next_1 - 1).color = new SolidColorBrush(Colors.Yellow);
                 if (theStep.next_2 > 0) boxes.ElementAt(theStep.next_2 - 1).color = new SolidColorBrush(Colors.Yellow);
@@ -259,7 +266,7 @@ namespace MYMGames.Hopscotch.Helpers
         {
             return players.ElementAt(current_player);
         }
-
+        //read questions from the related xml files
         public static void loadQuestions()
         {
             /* Depricated code for creating a sample xml file for questions

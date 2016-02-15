@@ -81,14 +81,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\AvatarFactory.cs" />
     <Compile Include="Helpers\BoxFactory.cs" />
     <Compile Include="Helpers\CarpetConnector.cs" />
     <Compile Include="Helpers\ChapterFactory.cs" />
     <Compile Include="Helpers\GameLogic.cs" />
     <Compile Include="Helpers\KinectHelper.cs" />
+    <Compile Include="Model\Avatar.cs" />
     <Compile Include="Model\BoxModel.cs" />
     <Compile Include="Model\Chapter.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\PlayerAvatar.cs" />
     <Compile Include="Model\Question.cs" />
     <Compile Include="Model\QuestionModel.cs" />
     <Compile Include="Model\Step.cs" />
@@ -225,6 +228,15 @@
     <Resource Include="Images\background.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\avatars\avatarf1.jpg" />
+    <Resource Include="Images\avatars\avatarf2.jpg" />
+    <Resource Include="Images\avatars\avatarf3.jpg" />
+    <Resource Include="Images\avatars\avatarf4.jpg" />
+    <Resource Include="Images\avatars\avatarm1.jpg" />
+    <Resource Include="Images\avatars\avatarm2.jpg" />
+    <Resource Include="Images\avatars\avatarm3.jpg" />
+    <Resource Include="Images\avatars\avatarm4.jpg" />
+    <Resource Include="Images\forward-button.png" />
     <Content Include="Sounds\yay_z.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

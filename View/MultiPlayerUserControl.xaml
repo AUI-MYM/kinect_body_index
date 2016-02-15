@@ -19,7 +19,8 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.Style>
@@ -40,69 +41,54 @@
                 <TextBlock x:Name="textBlock" TextWrapping="Wrap" FontWeight="Bold" Foreground="Orange" Text="{Binding ChooseDifficulty}" HorizontalAlignment="Center" FontSize="52" VerticalAlignment="Center" FontFamily="Ravie" Background="{x:Null}">
                 </TextBlock>
             </Grid>
+            <Button Grid.Column="2" Style="{StaticResource KinectTileButton}" Command="{Binding nextToDifficultySelectionCommand}">
+                <Image HorizontalAlignment="Center" Margin="10 10 10 10" Source="../Images/forward-button.png" />
+            </Button>
         </Grid>
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <ItemsControl Grid.Column="0" ItemsSource="{Binding multiPlayers, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Center" Margin="20 30 20 30">
-                            <Button MinWidth="200" HorizontalAlignment="Left" Style="{StaticResource KinectTileButton}" x:Name="MenuButton" Command="{Binding theCommand}" CommandParameter="{Binding text}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"
-                                    Width="Auto">
-                                <Grid>
-                                    <TextBlock TextWrapping="Wrap" x:Name="textBlock" Text="{Binding text}" HorizontalAlignment="Center" 
-                                       FontSize="48" FontWeight="Bold" FontFamily="Ravie" Background="{x:Null}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property= "Foreground" Value="White"/>
-                                                <Style.Triggers>
-                                                    <Trigger Property ="IsMouseOver" Value="True">
-                                                        <Setter Property= "Foreground" Value="Red"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Grid>
-                            </Button>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <ItemsControl Grid.Column="1" ItemsSource="{Binding players, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Center" Margin="20 25 20 25">
-                            <TextBox TextWrapping="Wrap" Text="{Binding name}" FontFamily="Ravie" BorderBrush="Orange" Foreground="White" BorderThickness="6,6,6,6" Background="{x:Null}" FontSize="48"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <Grid Grid.Column="2" Visibility="{Binding visibilityNextButton, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" >
-                <Viewbox MinWidth="120" MinHeight="60" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button Style="{StaticResource KinectTileButton}" Command="{Binding nextToDifficultySelectionCommand}">
-                        <Grid>
-                            <TextBlock FontSize="42" HorizontalAlignment="Center" Text="Next&#8594;" FontFamily="Ravie">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property= "Foreground" Value="White"/>
-                                        <Style.Triggers>
-                                            <Trigger Property ="IsMouseOver" Value="True">
-                                                <Setter Property= "Foreground" Value="Red"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
 
+            <ItemsControl x:Name="playerList" Grid.Column="0" ItemsSource="{Binding multiPlayers, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MaxHeight="125">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer Margin="0,0,0,10" VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              Name="scrollViewer" MaxWidth="500"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Disabled" 
+                              k:KinectRegion.IsScrollInertiaEnabled="true" Grid.Column="0">
+                                <ItemsControl ItemsSource="{Binding Path=avatars, UpdateSourceTrigger=PropertyChanged}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource KinectTileButton}" Margin="7 7 7 7" Command="{Binding command}"
+                                                    CommandParameter="{Binding avatar_id}">
+                                                <Border BorderBrush="{Binding borderColor}" BorderThickness="6">
+                                                    <Image Source="{Binding avatar}"></Image>
+                                                </Border>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </ScrollViewer>
+                            <Grid HorizontalAlignment="Center" Margin="20 25 20 25" Grid.Column="1">
+                                <TextBox TextWrapping="Wrap" Text="{Binding name}" FontFamily="Ravie" BorderBrush="Orange" Foreground="White" BorderThickness="6,6,6,6" Background="{x:Null}" FontSize="48"/>
+                            </Grid>
+                            <CheckBox VerticalAlignment="Center" Grid.Column="2" Content="Ready?" IsEnabled="{Binding isEnabled}" IsChecked="{Binding active}" x:Name="checkPopUpQuiz" Style="{StaticResource CheckBoxStyle}"></CheckBox>
                         </Grid>
-                    </Button>
-                </Viewbox>
-            </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Grid>
 </UserControl>

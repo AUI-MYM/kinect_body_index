@@ -813,8 +813,8 @@
 
     <!-- CheckBox Style-->
     <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
-        <Setter Property="MinHeight" Value="112" />
-        <Setter Property="MinWidth" Value="316" />
+        <Setter Property="MinHeight" Value="80" />
+        <Setter Property="MinWidth" Value="256" />
         <Setter Property="MaxWidth" Value="948" />
         <Setter Property="Padding" Value="18,14,18,14" />
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />

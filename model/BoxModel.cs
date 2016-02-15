@@ -8,6 +8,7 @@ using System.Windows.Media;
 
 namespace MYMGames.Hopscotch.Model
 {
+    //The model of the BoxModel view
     public class BoxModel
     {
         public Visibility visibility { get; set; }

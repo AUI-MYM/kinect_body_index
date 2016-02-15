@@ -13,6 +13,7 @@ namespace MYMGames.Hopscotch.Model
         public int score { get; set; }
         public bool synced { get; set; }
         public string id { get; set; }
+        public string avatarid { get; set; }
         public LeaderboardModel()
         {
             synced = false;

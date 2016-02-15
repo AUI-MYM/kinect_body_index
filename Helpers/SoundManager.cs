@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MYMGames.Hopscotch.Helpers
 {
+    //this class plays the sounds asynchronously 
     public class SoundManager
     {
         static string menuUri = "Sounds/menu.wav";

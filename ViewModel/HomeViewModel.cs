@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MYMGames.Hopscotch.ViewModel
 {
@@ -19,6 +20,7 @@ namespace MYMGames.Hopscotch.ViewModel
             initMainMenu(null);
         }
         #region ui set methods
+        //after each change of usercontrol, the lists are cleared to avoid the conflicts
         private void clearfields()
         {
             ChooseDifficulty = "";
@@ -28,9 +30,9 @@ namespace MYMGames.Hopscotch.ViewModel
             popQuizListAgeList = new List<StringBoolDuo>();
             timeTrialList = new List<StringBoolDuo>();
             readyList = new List<Menu_Item>();
-            multiPlayers = new List<Menu_Item>();
+            multiPlayers = new List<PlayerAvatar>();
         }
-
+        //the method initializes the main menu by creating the related menu items
         public void initMainMenu(Object obj)
         {
             clearfields();
@@ -43,7 +45,6 @@ namespace MYMGames.Hopscotch.ViewModel
             MainMenuUserControl mmuc = new MainMenuUserControl();
             CurrentPage = mmuc;
         }
-
         private void showLeaderboard(object obj)
         {
             clearfields();
@@ -61,13 +62,21 @@ namespace MYMGames.Hopscotch.ViewModel
 
         private void startGame(Object obj)
         {
+            players = new List<Player>();
+            foreach(PlayerAvatar pa in multiPlayers)
+            {
+                if (pa.active)
+                {
+                    players.Add(new Player(pa.getSelectedAvatar()));
+                }
+            }
             clearfields();
             ChooseDifficulty = "Choose Difficulty";
             screenStep = 1;
             List<GameMode> items = new List<GameMode>();
             items.Add(new GameMode("Easy", "../Images/level1.png", new RelayCommand(setDifficulty),0));
             items.Add(new GameMode("Medium", "../Images/level2.png", new RelayCommand(setDifficulty),1));
-            items.Add(new GameMode("Hard", "../Images/level3.png", new RelayCommand(setDifficulty),2));
+            items.Add(new GameMode("Hard", "../Images/level3.png", new RelayCommand(setDifficulty),1));
             GameModes = items;
             DifficultyUserControl duc = new DifficultyUserControl();
             CurrentPage = duc;
@@ -107,28 +116,69 @@ namespace MYMGames.Hopscotch.ViewModel
         {
             clearfields();
             screenStep = 6;
-            ChooseDifficulty = "Select Number of Players";
-            multiPlayers = new List<Menu_Item>()
+            ChooseDifficulty = "Set player details";
+            multiPlayers = new List<PlayerAvatar>()
             {
-                new Menu_Item("1 Player", new RelayCommand(setPlayerNames)),
-                new Menu_Item("2 Players", new RelayCommand(setPlayerNames)),
-                new Menu_Item("3 Players", new RelayCommand(setPlayerNames)),
-                new Menu_Item("4 Players", new RelayCommand(setPlayerNames))
+                new PlayerAvatar("../Images/avatars/avatar1f.jpg", new RelayCommand(clickOnAvatar), 0),
+                new PlayerAvatar("../Images/avatars/avatar1f.jpg", new RelayCommand(clickOnAvatar), 1),
+                new PlayerAvatar("../Images/avatars/avatar1m.jpg", new RelayCommand(clickOnAvatar), 2),
+                new PlayerAvatar("../Images/avatars/avatar1m.jpg", new RelayCommand(clickOnAvatar), 3)
             };
+            multiPlayers.First().active = true;
+            multiPlayers.First().isEnabled = false;
             CurrentPage = new MultiPlayerUserControl();
         }
-
-        private void setPlayerNames(object obj)
+        //this the event on clicking the avatar selection of each player
+        //below code finds exactly which list to update contents, and updates it
+        private void clickOnAvatar(object obj)
         {
-            int numberOfPlayers = int.Parse(((string)obj).Split(' ')[0]);
-            List<Player> items = new List<Player>();
-            for (int i=0; i<numberOfPlayers; i++)
+            int player_index = int.Parse(((string)obj).Split(' ')[0]);
+            int avatar_index = (int.Parse(((string)obj).Split(' ')[1].Substring(1)) - 1) * 2;
+            switch (((string)obj).Split(' ')[1][0])
             {
-                items.Add(new Player("../Images/avatar.png"));
+                case 'm':
+                    avatar_index++;
+                    break;
             }
-            players = items;
-            visibilityNextButton = true;
+            PlayerAvatar pa = _multiPlayers.ElementAt(player_index);
+            pa.avatars.ElementAt(pa.selected_avatar_index).active = false;
+            pa.avatars.ElementAt(avatar_index).active = true;
+            pa.selected_avatar_index = avatar_index;
+            //multiPlayers = multiPlayers;
+            //((MultiPlayerUserControl)_CurrentPage).playerList.Items.Refresh();
+            //a workaround to refresh the avatar lists, rather than refreshing the whole list, because it causes to lose focus on the avatar image
+            ContentPresenter cp = ((MultiPlayerUserControl)_CurrentPage).playerList.ItemContainerGenerator.ContainerFromIndex(player_index) as ContentPresenter;
+            ItemsControl ic = FindVisualChild<ItemsControl>(cp,0);
+            if (ic != null)
+            {
+                ic.Items.Refresh();
+            }
         }
+        //copy paste method from stackoverflow, it looks for an element in the visualtreehelper
+        public T FindVisualChild<T>(DependencyObject depObj, int index) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        if (index == 0)
+                            return (T)child;
+                        else
+                        {
+                            index--;
+                        }
+                    }
+
+                    T childItem = FindVisualChild<T>(child, index);
+                    if (childItem != null) return childItem;
+                }
+            }
+            return null;
+        }
+
 
         private void openGameModeWindow(object obj)
         {
@@ -217,8 +267,8 @@ namespace MYMGames.Hopscotch.ViewModel
             private set { _leaderboardList = value; RaisePropertyChanged("leaderboardlist"); }
         }
 
-        private List<Menu_Item> _multiPlayers;
-        public List<Menu_Item> multiPlayers
+        private List<PlayerAvatar> _multiPlayers;
+        public List<PlayerAvatar> multiPlayers
         {
             get { return _multiPlayers; }
             private set { _multiPlayers = value; RaisePropertyChanged("multiPlayers"); }
@@ -365,6 +415,7 @@ namespace MYMGames.Hopscotch.ViewModel
                     break;
             }
         }
+        //close the application entirely if this window is closed
         public void exit(object obj)
         {
             Application.Current.Shutdown();

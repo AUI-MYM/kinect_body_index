@@ -15,7 +15,6 @@ namespace MYMGames.Hopscotch.ViewModel
     {
         public GameModeViewModel()
         {
-            GoBackToMainMenu = new RelayCommand(goToMainMenu);
             //boxes = GameLogic.boxes;
             players = GameLogic.players;
             pop_quiz_text = "Quizes: ";
@@ -40,19 +39,11 @@ namespace MYMGames.Hopscotch.ViewModel
             get { return _players; }
             set { _players = value; RaisePropertyChanged("players"); }
         }
-        public RelayCommand GoBackToMainMenu { get; set; }
         private List<BoxModel> _boxes;//depricated
         public List<BoxModel> boxes
         {
             get { return _boxes; }
             set { _boxes = value; RaisePropertyChanged("boxes"); }
-        }
-        #endregion
-
-        #region navigation
-        private void goToMainMenu(object obj)
-        {
-            WindowManager.goBack(); 
         }
         #endregion
     }

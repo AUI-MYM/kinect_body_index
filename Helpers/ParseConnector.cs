@@ -34,8 +34,8 @@ namespace MYMGames.Hopscotch.Helpers
                         rank = rankCounter++,
                         score = obj.Get<int>("score"),
                         user_name = obj.Get<string>("user_name"),
-                        id = obj.ObjectId
-
+                        id = obj.ObjectId,
+                        avatarid = obj.Get<string>("avatarid")
                     });
                 }
                 sycned_items = items;

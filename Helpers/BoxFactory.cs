@@ -9,6 +9,7 @@ using System.Windows.Media;
 
 namespace MYMGames.Hopscotch.Helpers
 {
+    //This factory class generates the list of boxes in the scope of the game, it matches row and column numbers to actual box numbers
     class BoxFactory
     {
         public static List<BoxModel> create_white_boxes()

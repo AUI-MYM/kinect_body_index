@@ -10,6 +10,8 @@ using System.Windows.Media;
 
 namespace MYMGames.Hopscotch.Helpers
 {
+    //this class has the necessary calculations to convert kinect coordinates to the virtual coordinate system of the boxes
+    //it checks  wheter the feet of the player are inside the box or not.
     class KinectHelper
     {
         public static Stopwatch stopwatch = new Stopwatch();
@@ -20,6 +22,7 @@ namespace MYMGames.Hopscotch.Helpers
         private static Body[] bodies = null;
         public static double reference_point_x;
         public static double reference_point_y;
+        //these are x and y coefficients to convert kinect coordinate to the box coordinate
         public static int[] x_coef = new int[] { 9, 1, 7, 5, 3, 7, 5, 3, 7, 5, 3, 9, 1 };
         public static int[] y_coef = new int[] { 9, 9, 7, 7, 7, 5, 5, 5, 3, 3, 3, 1, 1 };
 
@@ -41,6 +44,7 @@ namespace MYMGames.Hopscotch.Helpers
 
         public static float posY_right { get; set; }
 
+        //everytime a frame is recivevd this event is triggered
         public static void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             bool canRun = false;
@@ -132,6 +136,7 @@ namespace MYMGames.Hopscotch.Helpers
                             posY_left = left_foot_z;
                             posX_right = right_foot_x;
                             posY_right = right_foot_z;
+                            //the foot flag indicates which foot is up in the air 
                             if (right_foot_y - left_foot_y > 0.12)
                             {
                                 foot_flag = 0;
@@ -148,13 +153,13 @@ namespace MYMGames.Hopscotch.Helpers
             }
 
         }
-
+        //this method tests if the user is in at least one of the boxes,checks the position of lower foot
         public static bool testBox(int box1, int box2)
         {
             double x_left = posX_left * 250 + reference_point_x / 2 - 25;
-            double y_left = (posY_left - 1.2) * 250 - 25;
+            double y_left = (posY_left - 1.0) * 250 - 25;
             double x_right = posX_right * 250 + reference_point_x / 2 - 25;
-            double y_right = (posY_right - 1.2) * 250 - 25;
+            double y_right = (posY_right - 1.0) * 250 - 25;
             if (foot_flag == 0)
             {
                 return textBox_(box1, x_left, y_left) && textBox_(-1, x_right, y_right);
@@ -167,9 +172,8 @@ namespace MYMGames.Hopscotch.Helpers
             {
                 return textBox_(box1, x_left, y_left) && textBox_(box2, x_right, y_right);
             }
-            
-
         }
+
         private static bool textBox_(int box1, double x, double y)
         {
             if (box1 < 1) return true;

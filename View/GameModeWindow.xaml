@@ -59,7 +59,7 @@
                     <ColumnDefinition Width="10*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1" x:Name="referenceGrid" Visibility="Visible">
-                    <Border BorderThickness="10" BorderBrush="Orange" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Border BorderThickness="10" BorderBrush="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Grid>
                             <ItemsControl Grid.IsSharedSizeScope="True" x:Name="box_items">
                                 <ItemsControl.ItemsPanel>
@@ -213,7 +213,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Margin="20 0 0 0" Style="{StaticResource KinectTileButton}" Command="{Binding GoBackToMainMenu}">
+                        <Button Margin="20 0 0 0" Style="{StaticResource KinectTileButton}" Click="Window_Closed">
                             <Image HorizontalAlignment="Center" Margin="10 10 10 10"  x:Name="image" Source="../Images/back-button.png" />
                         </Button>
                         <Grid Grid.Column="1">

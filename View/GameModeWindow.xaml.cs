@@ -76,7 +76,8 @@ namespace MYMGames.Hopscotch.View
             KinectHelper.reference_point_y = referenceGrid.ActualHeight;
             dispatcherTimer.Start();
         }
-
+        //the timer event chich works every 200ms, it triggers the event of checking the current position
+        //of the user, also updates the feet location on the screen
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             Storyboard myStoryboard = (Storyboard)this.Resources["TestStoryboard"];
@@ -162,15 +163,19 @@ namespace MYMGames.Hopscotch.View
                         case 0:
                             break;
                         case 1:
+                            CarpetConnector.sendData("58");
                             show_message_wait_for_ready("Next Player: " + username);
                             break;
                         case 2:
+                            CarpetConnector.sendData("58");
                             show_message_wait_for_ready("Bravoo!! Tell me when you are ready");
                             break;
                         case 3:
+                            CarpetConnector.sendData("58");
                             show_message_wait_for_ready("Congratulations you finished all!! Your turn " + username + "!!");
                             break;
                         case 4:
+                            CarpetConnector.sendData("58");
                             game_finished = true;
                             show_message_wait_for_ready("The game ends...");
                             break;
@@ -191,7 +196,10 @@ namespace MYMGames.Hopscotch.View
 
             
         }
-
+        /*
+        Clears the boxes and shows the given message to the user, the message is the notification
+        stating the next player, or the player is advanced to next chapter
+        */
         private void show_message_wait_for_ready(string message)
         {
             box_items.ItemsSource = GameLogic.boxes;
@@ -209,9 +217,12 @@ namespace MYMGames.Hopscotch.View
                 }
             }
         }
-
+        //workaround flag for not closing the window 2 times problem
+        private bool closed_flag = false;
+        //this event is called when the window is called, it releases the kinect variables.
         private void Window_Closed(object sender, EventArgs e)
         {
+            if (closed_flag) return;
             if (this.bodyFrameReader != null)
             {
                 // BodyFrameReader is IDisposable
@@ -225,9 +236,12 @@ namespace MYMGames.Hopscotch.View
                     ParseConnector.addScore(p.name, p.score);
                 }
             }
+            closed_flag = true;
+            WindowManager.goBack();
 
         }
-
+        //the ready button provided to the user after every interrupt of the game
+        //we have this button not to let user to manage time when playin with time trial
         private void Button_Click_Ready(object sender, RoutedEventArgs e)
         {
             if (game_finished)
@@ -240,6 +254,7 @@ namespace MYMGames.Hopscotch.View
             stall = false;
 
         }
+        //This method clears the boxes and pops up a challenge for the user
         private void showQuestionAndWaitForTheAnswer()
         {
             Question question = GameLogic.getRandomQuestion();
@@ -255,7 +270,8 @@ namespace MYMGames.Hopscotch.View
             question_grid.Visibility = Visibility.Visible;
             stall = true;
         }
-
+        //Clicking yes and no methodes are duplicate methods, which redirects the view 
+        //depending on the user answered correct or not
         private void Button_Click_Yes(object sender, RoutedEventArgs e)
         {
             GameLogic.error_happened = (true != currentQuestion.answer) ? 2 : 0;
